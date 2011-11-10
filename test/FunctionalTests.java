@@ -1,41 +1,68 @@
-import com.eaio.stringsearch.BNDM;
-import com.eaio.stringsearch.StringSearch;
+import com.eaio.stringsearch.*;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import static java.lang.System.out;
 
 /**
  * This is the entry point for Part 1: Functional tests
  */
 public class FunctionalTests {
 
-
     public static void main(String[] args) {
 
-        // Test case 1:
-        test1();
+        StringSearch stringSearch = new BNDM();
+        StringSearch[] stringSearchInstances = {
+                new BNDM(),
+                new BNDMCI(),
+                new BNDMWildcards(),
+                new BNDMWildcardsCI(),
+                new BoyerMooreHorspool(),
+                new BoyerMooreHorspoolRaita()
+        };
+
+        int numTestCases = 0;
+        int passedTestCases = 0;
+
+        for(StringSearch stringSearchInstance : stringSearchInstances) {
+            final StringContainTests test = new StringContainTests(stringSearchInstance);
+            final Class bndmTestClass = StringContainTests.class;
+
+            for (Method declaredMethod : bndmTestClass.getDeclaredMethods()) {
+                if (declaredMethod.getName().startsWith("test")) {
+                    out.println("Running test - " + declaredMethod.getName());
+
+                    numTestCases++;
+                    try {
+                        declaredMethod.invoke(test);
+
+                        passedTestCases++;
+
+                    } catch (IllegalAccessException e) {
+                        out.println("Wrong argument passed to - " + declaredMethod.getName());
+                        e.printStackTrace(out);
+
+                    } catch (InvocationTargetException e) {
+                        out.println("Something went wrong while trying to invoke the test - " + declaredMethod.getName());
+                        e.printStackTrace(out);
+
+                    } catch(Exception e) {
+                        out.println("The library crashed while calling '" + declaredMethod.getName() + "' for reason - " + e.getMessage());
+                        e.printStackTrace(out);
+
+                    }
+                }
+            }
+        }
+
 
         // ... Create at least 20 more tests based on our requirements-based test
         // generation strategies.
 
 
-        System.out.println("Tests completed successfully.");
-    }
-
-    static void test1() {
-        // Technique used: Equivalence Partitioning.
-
-        // This test case represents the equivalence class of test inputs
-        // to the BNDM implementation of StringSearch.searchString that contain:
-
-        //  - a non-null pattern
-        //  - a non-null string
-        //  - the pattern is NOT found in the string.
-
-        StringSearch ss = new BNDM();
-        String str = "helloworld";
-        String pattern = "se6367";
-
-        int location = ss.searchString(str, pattern);
-
-        Assert.assertEquals(-1, location);
-
+        out.println();
+        out.println("Total number of test cases: " + numTestCases);
+        out.println("Passed: " + passedTestCases + ", Failed: " +  (numTestCases-passedTestCases));
     }
 }
