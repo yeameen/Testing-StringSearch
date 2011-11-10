@@ -11,14 +11,14 @@ import java.util.regex.Pattern;
  * Time: 6:35 PM
  * To change this template use File | Settings | File Templates.
  */
-public class StringContainTests {
+public class StringMatchingTests {
 
     private StringSearch stringSearch;
 
     private boolean isIgnoreCase;
     private boolean isWildcards;
 
-    public StringContainTests(StringSearch stringSearch, boolean isIgnoreCase, boolean isWildcards) {
+    public StringMatchingTests(StringSearch stringSearch, boolean isIgnoreCase, boolean isWildcards) {
         this.stringSearch = stringSearch;
         this.isIgnoreCase = isIgnoreCase;
         this.isWildcards = isWildcards;
@@ -29,13 +29,14 @@ public class StringContainTests {
     }
 
     private String getSamplePattern(String input) {
-        String output = new String(input);
+        String output = input;
         int length = input.length();
 
         if(isIgnoreCase) {
             int numberOfCharactersToReplace = getRandomIntWithinRange(length);
+
             char[] chars = input.toCharArray();
-            for(int i = 0; i <= numberOfCharactersToReplace; i++) {
+            for(int i = 0; i < numberOfCharactersToReplace; i++) {
                 int randomPosition = getRandomIntWithinRange(length);
                 if(Character.isUpperCase(chars[randomPosition])) {
                     chars[randomPosition] = Character.toLowerCase(chars[randomPosition]);
@@ -48,10 +49,15 @@ public class StringContainTests {
 
         if(isWildcards) {
             int numberOfCharactersToReplace = getRandomIntWithinRange(length);
+
+            if (isWildcards && numberOfCharactersToReplace > length - 2) {
+                numberOfCharactersToReplace = length - 2;
+            }
+
             char[] chars = input.toCharArray();
-            for(int i = 0; i <= numberOfCharactersToReplace; i++) {
+            for(int i = 0; i < numberOfCharactersToReplace; i++) {
                 int randomPosition = getRandomIntWithinRange(length);
-                chars[i] = '.';
+                chars[randomPosition] = '.';
             }
             output = new String(chars);
         }
@@ -59,14 +65,15 @@ public class StringContainTests {
         return output;
     }
 
-    void match(String target, String pattern, int expectedPosition) {
-        System.out.println("target: " + target + ", pattern: " + pattern);
+    void match(String target, String pattern, int expectedPosition) throws AssertionFailureException {
+        System.out.print("  target: " + target + ", pattern: " + pattern);
         int location = stringSearch.searchString(target, pattern);
 
         Assert.assertEquals(expectedPosition, location);
+        System.out.println(" (PASSED)");
     }
 
-    void testMismatch() {
+    void testMismatch() throws AssertionFailureException {
         // Technique used: Equivalence Partitioning.
 
         // This test case represents the equivalence class of test inputs
@@ -123,7 +130,7 @@ public class StringContainTests {
     /**
      * Test with a pattern longer than 32 characters. It ignores the rest
      */
-    void testLongerThanAllowedPattern() {
+    void testLongerThanAllowedPattern() throws AssertionFailureException {
         /**
          * Technique used: Equivalence Partitioning.
          *
@@ -147,7 +154,7 @@ public class StringContainTests {
         match(str, pattern, 17);
     }
 
-    void testMatchingAtBeginning() {
+    void testMatchingAtBeginning() throws AssertionFailureException {
         /**
          * Technique used: boundary value matching.
          *
@@ -164,7 +171,7 @@ public class StringContainTests {
         match(str, pattern, 0);
     }
 
-    void testMatchingAtMiddle() {
+    void testMatchingAtMiddle() throws AssertionFailureException {
         /**
          * Technique used: Equivalence Input Partitioning.
          *
@@ -179,7 +186,7 @@ public class StringContainTests {
 
     }
 
-    void testMatchingAtEnd() {
+    void testMatchingAtEnd() throws AssertionFailureException {
 
         /**
          * Technique used: Equivalence Input Partitioning.
@@ -194,7 +201,7 @@ public class StringContainTests {
         match(str, pattern, 13);
     }
 
-    void testFullMatch() {
+    void testFullMatch() throws AssertionFailureException {
         /**
          * Technique used: Equivalence Input Partitioning.
          *
@@ -209,7 +216,7 @@ public class StringContainTests {
 
     }
 
-    void testOverMatch() {
+    void testOverMatch() throws AssertionFailureException {
         /**
          * Technique used: Equivalence Input Partitioning.
          *
@@ -218,12 +225,12 @@ public class StringContainTests {
          */
 
         String str = "thequickbrownfox";
-        String pattern = ("thequickbrownfoxjump");
+        String pattern = getSamplePattern("thequickbrownfoxjump");
 
         match(str, pattern, -1);
     }
 
-    void testSpaceMatch() {
+    void testSpaceMatch() throws AssertionFailureException {
         String str = "hello world";
         String pattern = " ";
 

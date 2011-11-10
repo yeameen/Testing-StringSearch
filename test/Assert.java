@@ -11,9 +11,9 @@ public class Assert {
      * @param value          if false, an exception is thrown
      * @param failureMessage a reason or hint to aid in debugging
      */
-    public static void assertIsTrue(boolean value, String failureMessage) {
+    public static void assertIsTrue(boolean value, String failureMessage) throws AssertionFailureException {
         if (!value) {
-            throw new RuntimeException("Assertion failure: Message is \"" + failureMessage + "\"");
+            throw new AssertionFailureException(failureMessage);
         }
     }
 
@@ -23,9 +23,9 @@ public class Assert {
      * @param expected the expected value
      * @param actual   the actual value
      */
-    public static void assertEquals(int expected, int actual) {
+    public static void assertEquals(int expected, int actual) throws AssertionFailureException {
         if (expected != actual) {
-            throw new RuntimeException(
+            throw new AssertionFailureException(
                     String.format("Assertion failure: expected=%d, actual=%d.", expected, actual)
             );
         }

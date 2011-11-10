@@ -1,8 +1,6 @@
 import com.eaio.stringsearch.*;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Vector;
 
 import static java.lang.System.out;
 
@@ -22,51 +20,56 @@ public class FunctionalTests {
     private static StringSearch instanceBoyerMooreHorspoolRaita = new BoyerMooreHorspoolRaita();
 
 
-    private static String splitCamelCase(String s) {
-       return s.replaceAll(
-          String.format("%s|%s|%s",
-             "(?<=[A-Z])(?=[A-Z][a-z])",
-             "(?<=[^A-Z])(?=[A-Z])",
-             "(?<=[A-Za-z])(?=[^A-Za-z])"
-          ),
-          " "
-       );
+    private static void runTestMethods(Object test) {
+        Class testsClass = test.getClass();
+        for (Method declaredMethod : testsClass.getDeclaredMethods()) {
+            if (declaredMethod.getName().startsWith("test")) {
+                out.println("Testing - " + TestHelper.splitCamelCase(declaredMethod.getName().substring(4)));
+
+                numTestCases++;
+                try {
+                    declaredMethod.invoke(test);
+
+                    passedTestCases++;
+
+                } catch (IllegalAccessException e) {
+                    out.println("Wrong argument passed to - " + declaredMethod.getName());
+                    e.printStackTrace(out);
+
+                } catch(Exception e) {
+                    if (e.getCause() instanceof AssertionFailureException) {
+                        out.println();
+                        out.println("  *******************************************************************************************************");
+                        out.println("  Failed! at " + e.getCause().getStackTrace()[1].toString());
+                        out.println("  " + e.getCause().getMessage());
+                        out.println("  *******************************************************************************************************");
+                    } else {
+                        out.println("The library crashed while calling '" + declaredMethod.getName() + "' for reason - " + e.getMessage());
+                        e.printStackTrace(out);
+                    }
+
+                }
+            }
+        }
     }
 
     private static void runStringTests(StringSearch[] stringSearchInstances, boolean isIgnoreCase, boolean isWildcards) {
 
         for(StringSearch stringSearchInstance : stringSearchInstances) {
 
-            System.out.println("\nRunning class: " + stringSearchInstance.getClass().getName());
+            System.out.println("\nUsing implementation: " + stringSearchInstance.getClass().getName());
 
-            final StringContainTests test = new StringContainTests(stringSearchInstance, isIgnoreCase, isWildcards);
-            final Class testsClass = StringContainTests.class;
+            StringMatchingTests testCases = new StringMatchingTests(stringSearchInstance, isIgnoreCase, isWildcards);
+            runTestMethods(testCases);
 
-            for (Method declaredMethod : testsClass.getDeclaredMethods()) {
-                if (declaredMethod.getName().startsWith("test")) {
-                    out.println("Running test - " + splitCamelCase(declaredMethod.getName().substring(4)));
-
-                    numTestCases++;
-                    try {
-                        declaredMethod.invoke(test);
-
-                        passedTestCases++;
-
-                    } catch (IllegalAccessException e) {
-                        out.println("Wrong argument passed to - " + declaredMethod.getName());
-                        e.printStackTrace(out);
-
-                    } catch (InvocationTargetException e) {
-                        out.println("Something went wrong while trying to invoke the test - " + declaredMethod.getName());
-                        e.printStackTrace(out);
-
-                    } catch(Exception e) {
-                        out.println("The library crashed while calling '" + declaredMethod.getName() + "' for reason - " + e.getMessage());
-                        e.printStackTrace(out);
-
-                    }
-                }
+            if(isIgnoreCase) {
+                // TODO: Write a test class to do some boundary testing
             }
+
+            if(isWildcards) {
+                // TODO: Write a test class to do some boundary testing
+            }
+
         }
     }
 
@@ -84,18 +87,17 @@ public class FunctionalTests {
         // true, true
         StringSearch[] stringSearchWildcardsIgnoreCaseInstances = {instanceBNDMWildcardsCI};
 
-        out.println("Running all");
+        out.println("\n\nTesting stringsearch with straight forward string matching");
         runStringTests(stringSearchInstances, false, false);
 
-        out.println("\n\nRunning wildcards matching");
+        out.println("\n\nTesting stringsearch with wildcards matching");
         runStringTests(stringSearchWildcardInstances, false, false);
 
-        out.println("\n\nRunning ignore case matching");
+        out.println("\n\nTesting stringsearch with ignore case");
         runStringTests(stringSearchIgnoreCaseInstances, true, false);
 
-        out.println("\n\nRunning wildcards + ignore case matching");
+        out.println("\n\nTesting stringsearch wildcards + ignore case");
         runStringTests(stringSearchWildcardsIgnoreCaseInstances, true, true);
-
 
         out.println();
         out.println("Total number of test cases: " + numTestCases);
