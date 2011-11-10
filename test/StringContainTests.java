@@ -15,8 +15,55 @@ public class StringContainTests {
 
     private StringSearch stringSearch;
 
-    public StringContainTests(StringSearch stringSearch) {
+    private boolean isIgnoreCase;
+    private boolean isWildcards;
+
+    public StringContainTests(StringSearch stringSearch, boolean isIgnoreCase, boolean isWildcards) {
         this.stringSearch = stringSearch;
+        this.isIgnoreCase = isIgnoreCase;
+        this.isWildcards = isWildcards;
+    }
+
+    private int getRandomIntWithinRange(int range) {
+        return (int)(Math.random() * range);
+    }
+
+    private String getSamplePattern(String input) {
+        String output = new String(input);
+        int length = input.length();
+
+        if(isIgnoreCase) {
+            int numberOfCharactersToReplace = getRandomIntWithinRange(length);
+            char[] chars = input.toCharArray();
+            for(int i = 0; i <= numberOfCharactersToReplace; i++) {
+                int randomPosition = getRandomIntWithinRange(length);
+                if(Character.isUpperCase(chars[randomPosition])) {
+                    chars[randomPosition] = Character.toLowerCase(chars[randomPosition]);
+                } else {
+                    chars[randomPosition] = Character.toUpperCase(chars[randomPosition]);
+                }
+            }
+            output = new String(chars);
+        }
+
+        if(isWildcards) {
+            int numberOfCharactersToReplace = getRandomIntWithinRange(length);
+            char[] chars = input.toCharArray();
+            for(int i = 0; i <= numberOfCharactersToReplace; i++) {
+                int randomPosition = getRandomIntWithinRange(length);
+                chars[i] = '.';
+            }
+            output = new String(chars);
+        }
+
+        return output;
+    }
+
+    void match(String target, String pattern, int expectedPosition) {
+        System.out.println("target: " + target + ", pattern: " + pattern);
+        int location = stringSearch.searchString(target, pattern);
+
+        Assert.assertEquals(expectedPosition, location);
     }
 
     void testMismatch() {
@@ -29,42 +76,38 @@ public class StringContainTests {
         //  - a non-null string
         //  - the pattern is NOT found in the string.
 
-//        StringSearch ss = new BNDM();
-        String str = "helloworld";
-        String pattern = "se6367";
+        String str = "thequickbrownfox";
+        String pattern = getSamplePattern("jumpover");
 
-        int location = stringSearch.searchString(str, pattern);
-
-        Assert.assertEquals(-1, location);
-
+        match(str, pattern, -1);
     }
 
-    void testJavaStringSearchWithEmptyPattern() {
-
-        String str = "something";
-        String pattern = "";
-
-        int location = str.indexOf(pattern);
-
-        System.out.println("It doesn't crash!");
-
-    }
-
-    void testJavaRegexWithEmptyPattern() {
-        String str = "something";
-        String pattern = "";
-
-        // Let's see if it crashes
-        Pattern p = Pattern.compile("");
-        Matcher m = p.matcher("helloworld");
-
-        boolean b = m.matches();
-
-        System.out.println("It doesn't crash!");
-    }
-
-
-
+//    void testJavaStringSearchWithEmptyPattern() {
+//
+//        String str = "something";
+//        String pattern = "";
+//
+//        int location = str.indexOf(pattern);
+//
+//        System.out.println("It doesn't crash!");
+//
+//    }
+//
+//    void testJavaRegexWithEmptyPattern() {
+//        String str = "something";
+//        String pattern = "";
+//
+//        // Let's see if it crashes
+//        Pattern p = Pattern.compile("");
+//        Matcher m = p.matcher("helloworld");
+//
+//        boolean b = m.matches();
+//
+//        System.out.println("It doesn't crash!");
+//    }
+//
+//
+//
 //    void testEmptyPattern() {
 //        /**
 //         * Test with empty pattern
@@ -99,10 +142,9 @@ public class StringContainTests {
         //  - the index of where the matching starts
 
         String str = "Garbage Starting Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
-        String pattern = "Lorem ipsum dolor sit amet, con8";
+        String pattern = getSamplePattern("Lorem ipsum dolor sit amet, cons8");
 
-        int location = stringSearch.searchString(str, pattern);
-        Assert.assertEquals(str.indexOf(pattern), location);
+        match(str, pattern, 17);
     }
 
     void testMatchingAtBeginning() {
@@ -116,12 +158,10 @@ public class StringContainTests {
          *
          */
 
-        String str = "helloworld";
-        String pattern = "hello";
+        String str = "thequickbrownfox";
+        String pattern = getSamplePattern("thequick");
 
-        int location = stringSearch.searchString(str, pattern);
-        Assert.assertEquals(str.indexOf(pattern), location);
-
+        match(str, pattern, 0);
     }
 
     void testMatchingAtMiddle() {
@@ -132,12 +172,10 @@ public class StringContainTests {
          * argument - a pattern that matches somewhere at the middle of the string
          */
 
-        String str = "helloworld";
-        String pattern = "llowo";
+        String str = "thequickbrownfox";
+        String pattern = getSamplePattern("quick");
 
-        int location = stringSearch.searchString(str, pattern);
-        Assert.assertEquals(str.indexOf(pattern), location);
-
+        match(str, pattern, 3);
 
     }
 
@@ -150,12 +188,10 @@ public class StringContainTests {
          * argument - a pattern that matches at the end of the string
          */
 
-        String str = "helloworld";
-        String pattern = "world";
+        String str = "thequickbrownfox";
+        String pattern = getSamplePattern("fox");
 
-        int location = stringSearch.searchString(str, pattern);
-        Assert.assertEquals(str.indexOf(pattern), location);
-
+        match(str, pattern, 13);
     }
 
     void testFullMatch() {
@@ -166,12 +202,10 @@ public class StringContainTests {
          * argument - a pattern that matches completely with the string
          */
 
-        String str = "helloworld";
-        String pattern = "helloworld";
+        String str = "thequickbrownfox";
+        String pattern = getSamplePattern("thequickbrownfox");
 
-        int location = stringSearch.searchString(str, pattern);
-        Assert.assertEquals(0, location);
-
+        match(str, pattern, 0);
 
     }
 
@@ -183,12 +217,10 @@ public class StringContainTests {
          * argument - a pattern that matches partially
          */
 
-        String str = "helloworld";
-        String pattern = "helloworldhello";
+        String str = "thequickbrownfox";
+        String pattern = ("thequickbrownfoxjump");
 
-        int location = stringSearch.searchString(str, pattern);
-        Assert.assertEquals(-1, location);
-
+        match(str, pattern, -1);
     }
 
     void testSpaceMatch() {
@@ -198,7 +230,5 @@ public class StringContainTests {
         int location = stringSearch.searchString(str, pattern);
 
         Assert.assertEquals(5, location);
-
     }
-
 }

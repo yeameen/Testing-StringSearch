@@ -2,6 +2,7 @@ import com.eaio.stringsearch.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Vector;
 
 import static java.lang.System.out;
 
@@ -10,28 +11,40 @@ import static java.lang.System.out;
  */
 public class FunctionalTests {
 
-    public static void main(String[] args) {
+    private static int numTestCases = 0;
+    private static int passedTestCases = 0;
 
-        StringSearch stringSearch = new BNDM();
-        StringSearch[] stringSearchInstances = {
-                new BNDM(),
-                new BNDMCI(),
-                new BNDMWildcards(),
-                new BNDMWildcardsCI(),
-                new BoyerMooreHorspool(),
-                new BoyerMooreHorspoolRaita()
-        };
+    private static StringSearch instanceBNDM = new BNDM();
+    private static StringSearch instanceBNDMCI = new BNDMCI();
+    private static StringSearch instanceBNDMWildcards = new BNDMWildcards();
+    private static StringSearch instanceBNDMWildcardsCI = new BNDMWildcardsCI();
+    private static StringSearch instanceBoyerMooreHorspool = new BoyerMooreHorspool();
+    private static StringSearch instanceBoyerMooreHorspoolRaita = new BoyerMooreHorspoolRaita();
 
-        int numTestCases = 0;
-        int passedTestCases = 0;
+
+    private static String splitCamelCase(String s) {
+       return s.replaceAll(
+          String.format("%s|%s|%s",
+             "(?<=[A-Z])(?=[A-Z][a-z])",
+             "(?<=[^A-Z])(?=[A-Z])",
+             "(?<=[A-Za-z])(?=[^A-Za-z])"
+          ),
+          " "
+       );
+    }
+
+    private static void runStringTests(StringSearch[] stringSearchInstances, boolean isIgnoreCase, boolean isWildcards) {
 
         for(StringSearch stringSearchInstance : stringSearchInstances) {
-            final StringContainTests test = new StringContainTests(stringSearchInstance);
-            final Class bndmTestClass = StringContainTests.class;
 
-            for (Method declaredMethod : bndmTestClass.getDeclaredMethods()) {
+            System.out.println("\nRunning class: " + stringSearchInstance.getClass().getName());
+
+            final StringContainTests test = new StringContainTests(stringSearchInstance, isIgnoreCase, isWildcards);
+            final Class testsClass = StringContainTests.class;
+
+            for (Method declaredMethod : testsClass.getDeclaredMethods()) {
                 if (declaredMethod.getName().startsWith("test")) {
-                    out.println("Running test - " + declaredMethod.getName());
+                    out.println("Running test - " + splitCamelCase(declaredMethod.getName().substring(4)));
 
                     numTestCases++;
                     try {
@@ -55,10 +68,33 @@ public class FunctionalTests {
                 }
             }
         }
+    }
 
+    public static void main(String[] args) {
 
-        // ... Create at least 20 more tests based on our requirements-based test
-        // generation strategies.
+        // false, false
+        StringSearch[] stringSearchInstances = {instanceBNDM, instanceBNDMCI, instanceBNDMWildcards, instanceBNDMWildcardsCI, instanceBoyerMooreHorspool, instanceBoyerMooreHorspoolRaita};
+
+        // false, true
+        StringSearch[] stringSearchWildcardInstances = {instanceBNDMWildcards, instanceBNDMWildcardsCI};
+
+        // true, false
+        StringSearch[] stringSearchIgnoreCaseInstances = {instanceBNDMCI, instanceBNDMWildcardsCI};
+
+        // true, true
+        StringSearch[] stringSearchWildcardsIgnoreCaseInstances = {instanceBNDMWildcardsCI};
+
+        out.println("Running all");
+        runStringTests(stringSearchInstances, false, false);
+
+        out.println("\n\nRunning wildcards matching");
+        runStringTests(stringSearchWildcardInstances, false, false);
+
+        out.println("\n\nRunning ignore case matching");
+        runStringTests(stringSearchIgnoreCaseInstances, true, false);
+
+        out.println("\n\nRunning wildcards + ignore case matching");
+        runStringTests(stringSearchWildcardsIgnoreCaseInstances, true, true);
 
 
         out.println();
