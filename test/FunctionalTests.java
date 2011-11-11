@@ -41,6 +41,7 @@ public class FunctionalTests {
                         out.println();
                         out.println("  *******************************************************************************************************");
                         out.println("  Failed! at " + e.getCause().getStackTrace()[1].toString());
+                        out.println("      Caller: at " + e.getCause().getStackTrace()[2].toString());
                         out.println("  " + e.getCause().getMessage());
                         out.println("  *******************************************************************************************************");
                     } else {
@@ -59,11 +60,12 @@ public class FunctionalTests {
 
             System.out.println("\nUsing implementation: " + stringSearchInstance.getClass().getName());
 
-            StringMatchingTests testCases = new StringMatchingTests(stringSearchInstance, isIgnoreCase, isWildcards);
+            Object testCases = new StringMatchingTests(stringSearchInstance, isIgnoreCase, isWildcards);
             runTestMethods(testCases);
 
             if(isIgnoreCase) {
-                // TODO: Write a test class to do some boundary testing
+                testCases = new IgnoreCaseTests(stringSearchInstance);
+                runTestMethods(testCases);
             }
 
             if(isWildcards) {
@@ -87,7 +89,7 @@ public class FunctionalTests {
         // true, true
         StringSearch[] stringSearchWildcardsIgnoreCaseInstances = {instanceBNDMWildcardsCI};
 
-        out.println("\n\nTesting stringsearch with straight forward string matching");
+        out.println("\n\nTesting stringsearch with straight-forward string matching");
         runStringTests(stringSearchInstances, false, false);
 
         out.println("\n\nTesting stringsearch with wildcards matching");

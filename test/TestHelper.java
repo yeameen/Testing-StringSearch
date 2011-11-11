@@ -1,3 +1,5 @@
+import com.eaio.stringsearch.StringSearch;
+
 /**
  * Created by IntelliJ IDEA.
  * User: yeameen
@@ -15,5 +17,13 @@ public class TestHelper {
           ),
           " "
        );
+    }
+
+    static void match(StringSearch stringSearch, String target, String pattern, int expectedPosition) throws AssertionFailureException {
+        System.out.print("  target: " + target + ", pattern: " + pattern);
+        int location = stringSearch.searchString(target, pattern);
+
+        Assert.assertEquals(expectedPosition, location);
+        System.out.println(" (PASSED)");
     }
 }

@@ -5,11 +5,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by IntelliJ IDEA.
- * User: yeameen
- * Date: 11/1/11
- * Time: 6:35 PM
- * To change this template use File | Settings | File Templates.
+ * @author Chowdhury Ashabul Yeameen
+ * @since 11/1/11
  */
 public class StringMatchingTests {
 
@@ -51,6 +48,7 @@ public class StringMatchingTests {
             int numberOfCharactersToReplace = getRandomIntWithinRange(length);
 
             if (isWildcards && numberOfCharactersToReplace > length - 2) {
+                /* Its not a good idea to replace all the characters by wildcards. So reduce the number */
                 numberOfCharactersToReplace = length - 2;
             }
 
@@ -66,18 +64,14 @@ public class StringMatchingTests {
     }
 
     void match(String target, String pattern, int expectedPosition) throws AssertionFailureException {
-        System.out.print("  target: " + target + ", pattern: " + pattern);
-        int location = stringSearch.searchString(target, pattern);
-
-        Assert.assertEquals(expectedPosition, location);
-        System.out.println(" (PASSED)");
+        TestHelper.match(stringSearch, target, pattern, expectedPosition);
     }
 
     void testMismatch() throws AssertionFailureException {
         // Technique used: Equivalence Partitioning.
 
         // This test case represents the equivalence class of test inputs
-        // to the BNDM implementation of StringSearch.searchString that contain:
+        // to any implementation of StringSearch.searchString that contain:
 
         //  - a non-null pattern
         //  - a non-null string
@@ -89,94 +83,102 @@ public class StringMatchingTests {
         match(str, pattern, -1);
     }
 
-//    void testJavaStringSearchWithEmptyPattern() {
-//
-//        String str = "something";
-//        String pattern = "";
-//
-//        int location = str.indexOf(pattern);
-//
-//        System.out.println("It doesn't crash!");
-//
-//    }
-//
-//    void testJavaRegexWithEmptyPattern() {
-//        String str = "something";
-//        String pattern = "";
-//
-//        // Let's see if it crashes
-//        Pattern p = Pattern.compile("");
-//        Matcher m = p.matcher("helloworld");
-//
-//        boolean b = m.matches();
-//
-//        System.out.println("It doesn't crash!");
-//    }
-//
-//
-//
-//    void testEmptyPattern() {
-//        /**
-//         * Test with empty pattern
-//         */
-//
-//        String str = "something";
-//        String pattern = "";
-//
-//        int location = stringSearch.searchString(str, pattern);
-//        Assert.assertEquals(-1, location);
-//    }
 
-    /**
-     * Test with a pattern longer than 32 characters. It ignores the rest
-     */
-    void testLongerThanAllowedPattern() throws AssertionFailureException {
+    void testIllegalInput() throws AssertionFailureException {
+
         /**
+         * Test 1
          * Technique used: Equivalence Partitioning.
          *
+         * This test case represents equivalence class of test inputs
+         * to any implementation of StringSearch. Since the documentation says no parameter may be null - the program
+         * is expected to through Exception
          *
          *
+         * Any illegal input null should throw Exception
+         *
+         * - a null target
+         * - a null pattern
+         * - should throw NullPointerException
+         *
+         * - a null target
+         * - a non-null pattern
+         * - should throw NullPointerException
+         *
+         * - a non-null target
+         * - a null pattern
+         * - should throw NullPointerException
          */
 
-        //
+        int numOfExceptions = 0;
 
-        // This test case represents the equivalence class of test inputs
+        String target = null;
+        String pattern = null;
 
-        // Input:
-        //  - a pattern with more than 32 characters
-        //  - a string that matches first 32 characters of the pattern
-        // Output:
-        //  - the index of where the matching starts
+        try {
+            stringSearch.searchString(target, pattern);
+        } catch (NullPointerException e) {
+            numOfExceptions++;
+        }
 
-        String str = "Garbage Starting Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
-        String pattern = getSamplePattern("Lorem ipsum dolor sit amet, cons8");
+        pattern = "quick";
 
-        match(str, pattern, 17);
+        try {
+            stringSearch.searchString(target, pattern);
+        } catch (NullPointerException e) {
+            numOfExceptions++;
+        }
+
+        target = "thequickbrown";
+        pattern = null;
+
+        try {
+            stringSearch.searchString(target, pattern);
+        } catch (NullPointerException e) {
+            numOfExceptions++;
+        }
+
+        Assert.assertIsTrue(3 == numOfExceptions, "Illegal input(s) should throw exception");
     }
 
-    void testMatchingAtBeginning() throws AssertionFailureException {
+    void testEmptyPattern() throws  AssertionFailureException {
         /**
-         * Technique used: boundary value matching.
+         * Test 2
+         * Technique used: Equivalence Partitioning.
          *
-         * Input:
-         * - a target string
-         * - a pattern that should match at the beginning of the string
-         * Output:
+         * This test case represents equivalence class of test inputs
+         * to any implementation of StringSearch.
+         *
+         * The pattern doesn't match with the target string
+         *
+         * - a non-null empty pattern
+         * - a non-null string
+         * - the pattern is NOT found in the string
          *
          */
 
-        String str = "thequickbrownfox";
-        String pattern = getSamplePattern("thequick");
+        String str = "something";
+        String pattern = "";
 
-        match(str, pattern, 0);
+        int location = stringSearch.searchString(str, pattern);
+        Assert.assertEquals(-1, location);
     }
+
 
     void testMatchingAtMiddle() throws AssertionFailureException {
         /**
+         * Test 3
+         *
          * Technique used: Equivalence Input Partitioning.
          *
-         * argument - a target string
-         * argument - a pattern that matches somewhere at the middle of the string
+         * This test case represents equivalence class of test inputs
+         * to any implementation of StringSearch.
+         *
+         * The pattern is found in the target string
+         *
+         * - a target string
+         * - a pattern that matches somewhere at the target string
+         * - the pattern is found in the string
          */
 
         String str = "thequickbrownfox";
@@ -186,42 +188,88 @@ public class StringMatchingTests {
 
     }
 
+
+    void testMatchingAtBeginning() throws AssertionFailureException {
+        /**
+         * Test 4
+         *
+         * Technique used: boundary value analysis.
+         *
+         * This test case checks string matching at the beginning of the target string.
+         *
+         * Input:
+         * - a target string
+         * - a pattern that should match at the beginning of the string
+         * Output:
+         * - the pattern is found at position 0
+         *
+         */
+
+        String str = "thequickbrown";
+        String pattern = getSamplePattern("thequick");
+
+        match(str, pattern, 0);
+    }
+
     void testMatchingAtEnd() throws AssertionFailureException {
 
         /**
-         * Technique used: Equivalence Input Partitioning.
+         * Test 5
          *
-         * argument - a target string
-         * argument - a pattern that matches at the end of the string
+         * Technique used: boundary value analysis.
+         *
+         * This test case checks string matching at the end of the target string.
+         *
+         * Input:
+         * - a target string
+         * - a pattern that matches at the end of the string
+         * Output:
+         * - the pattern found position is the difference between two input lengths
+         *
          */
 
-        String str = "thequickbrownfox";
-        String pattern = getSamplePattern("fox");
+        String str = "thequickbrown";
+        String pattern = getSamplePattern("brown");
 
-        match(str, pattern, 13);
+        match(str, pattern, str.length() - pattern.length());
     }
 
     void testFullMatch() throws AssertionFailureException {
         /**
-         * Technique used: Equivalence Input Partitioning.
+         * Test 6
          *
-         * argument - a target string
-         * argument - a pattern that matches completely with the string
+         * Technique used: boundary value analysis.
+         *
+         * This test case checks string matching between exact same string.
+         *
+         * Input:
+         * - a target string
+         * - a pattern that is same as the input string (may have wildcard or case variant)
+         * Output:
+         * - the pattern is found at position 0
+         *
          */
 
         String str = "thequickbrownfox";
         String pattern = getSamplePattern("thequickbrownfox");
 
         match(str, pattern, 0);
-
     }
 
     void testOverMatch() throws AssertionFailureException {
         /**
-         * Technique used: Equivalence Input Partitioning.
+         * Test 7
          *
-         * argument - a target string
-         * argument - a pattern that matches partially
+         * Technique used: boundary value analysis.
+         *
+         * This test case tries to match between two strings where target is a substring of the pattern.
+         *
+         * Input:
+         * - a target string
+         * - a pattern that is longer than and contains the substring
+         *
+         * - the pattern not found in the target
+         *
          */
 
         String str = "thequickbrownfox";
@@ -230,12 +278,52 @@ public class StringMatchingTests {
         match(str, pattern, -1);
     }
 
-    void testSpaceMatch() throws AssertionFailureException {
-        String str = "hello world";
-        String pattern = " ";
+    void testSpecialCharacterMatch() throws AssertionFailureException {
+        /**
+         * Test 8
+         *
+         * Technique used: equivalence test partitioning & boundary value.
+         * - Equivalence in the sense this particular test uses special characters.
+         * - Boundary in the sense all characters in the pattern are special characters; testing whether
+         *     library can handle all these
+         *
+         * This test case runs matching between strings with special characters
+         *
+         * Input:
+         * - a target string with special character
+         * - a pattern of special characters that matches the target string
+         *
+         * - the pattern found at the target
+         *
+         */
+
+        String str = "hello_+&^* ()-=!@#world";
+        String pattern = "&^* ()";
 
         int location = stringSearch.searchString(str, pattern);
 
-        Assert.assertEquals(5, location);
+        Assert.assertEquals(str.indexOf('&'), location);
     }
+
+    void testLongerThanAllowedPattern() throws AssertionFailureException {
+        /**
+         * Test 9
+         *
+         * Technique used: boundary value.
+         *
+         * Input:
+         *  - a pattern with more than 32 characters
+         *  - a target string that matches first 32 characters of the pattern
+         * Output:
+         *  - the index of where the matching starts
+         *
+         *  Note: This test fails on BoyerMoore variants
+         */
+
+        String str = "Garbage Starting Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+        String pattern = getSamplePattern("Lorem ipsum dolor sit amet, cons8");
+
+        match(str, pattern, 17);
+    }
+
 }
