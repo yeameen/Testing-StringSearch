@@ -1,5 +1,4 @@
 import com.eaio.stringsearch.StringSearch;
-import static TestHelper.match;
 /**
  * Created by IntelliJ IDEA.
  * User: yeameen
@@ -7,7 +6,7 @@ import static TestHelper.match;
  * Time: 11:02 AM
  * To change this template use File | Settings | File Templates.
  */
-public class IgnoreCaseTests {
+public class IgnoreCaseTests implements StringSearchTests {
     private StringSearch stringSearch;
 
     private String target;
@@ -24,7 +23,7 @@ public class IgnoreCaseTests {
 
     public void testAllSameCase() throws AssertionFailureException {
         /**
-         * Test 10
+         * Test 14
          *
          * Technique used: boundary value.
          *
@@ -36,14 +35,14 @@ public class IgnoreCaseTests {
          *  - the index of where the matching starts
          */
 
-        match(stringSearch, target.toLowerCase(), pattern.toLowerCase(), expectedPosition);
+        TestHelper.match(stringSearch, target.toLowerCase(), pattern.toLowerCase(), expectedPosition);
 
-        match(stringSearch, target.toUpperCase(), pattern.toUpperCase(), expectedPosition);
+        TestHelper.match(stringSearch, target.toUpperCase(), pattern.toUpperCase(), expectedPosition);
     }
 
     public void testAllOppositeCase() throws AssertionFailureException {
         /**
-         * Test 11
+         * Test 15
          *
          * Technique used: boundary value.
          *
@@ -55,8 +54,8 @@ public class IgnoreCaseTests {
          *  - the index of where the matching starts
          */
 
-        match(stringSearch, target.toLowerCase(), pattern.toUpperCase(), expectedPosition);
+        TestHelper.match(stringSearch, target.toLowerCase(), pattern.toUpperCase(), expectedPosition);
 
-        match(stringSearch, target.toUpperCase(), pattern.toLowerCase(), expectedPosition);
+        TestHelper.match(stringSearch, target.toUpperCase(), pattern.toLowerCase(), expectedPosition);
     }
 }

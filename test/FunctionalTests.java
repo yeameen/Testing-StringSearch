@@ -20,7 +20,7 @@ public class FunctionalTests {
     private static StringSearch instanceBoyerMooreHorspoolRaita = new BoyerMooreHorspoolRaita();
 
 
-    private static void runTestMethods(Object test) {
+    private static void runTestMethods(StringSearchTests test) {
         Class testsClass = test.getClass();
         for (Method declaredMethod : testsClass.getDeclaredMethods()) {
             if (declaredMethod.getName().startsWith("test")) {
@@ -60,7 +60,7 @@ public class FunctionalTests {
 
             System.out.println("\nUsing implementation: " + stringSearchInstance.getClass().getName());
 
-            Object testCases = new StringMatchingTests(stringSearchInstance, isIgnoreCase, isWildcards);
+            StringSearchTests testCases = new StringMatchingTests(stringSearchInstance, isIgnoreCase, isWildcards);
             runTestMethods(testCases);
 
             if(isIgnoreCase) {
@@ -69,9 +69,9 @@ public class FunctionalTests {
             }
 
             if(isWildcards) {
-                // TODO: Write a test class to do some boundary testing
+                testCases = new WildcardsTests(stringSearchInstance);
+                runTestMethods(testCases);
             }
-
         }
     }
 
