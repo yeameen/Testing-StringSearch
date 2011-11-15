@@ -24,6 +24,5 @@ public class TestHelper {
         int location = stringSearch.searchString(target, pattern);
 
         Assert.assertEquals(expectedPosition, location);
-        System.out.println(" (PASSED)");
     }
 }

@@ -18,6 +18,7 @@ public class FunctionalTests {
     private static StringSearch instanceBNDMWildcardsCI = new BNDMWildcardsCI();
     private static StringSearch instanceBoyerMooreHorspool = new BoyerMooreHorspool();
     private static StringSearch instanceBoyerMooreHorspoolRaita = new BoyerMooreHorspoolRaita();
+    private static MismatchSearch instanceMismatchSearch = new ShiftOrMismatches();
 
 
     private static void runTestMethods(StringSearchTests test) {
@@ -31,6 +32,8 @@ public class FunctionalTests {
                     declaredMethod.invoke(test);
 
                     passedTestCases++;
+
+                    out.println("  (PASSED)");
 
                 } catch (IllegalAccessException e) {
                     out.println("Wrong argument passed to - " + declaredMethod.getName());
@@ -54,13 +57,18 @@ public class FunctionalTests {
         }
     }
 
+    private static void runStringMismatchTests(MismatchSearch mismatchSearch) {
+        StringSearchTests testCases = new StringMismatchTests(mismatchSearch);
+        runTestMethods(testCases);
+    }
+
     private static void runStringTests(StringSearch[] stringSearchInstances, boolean isIgnoreCase, boolean isWildcards) {
 
         for(StringSearch stringSearchInstance : stringSearchInstances) {
 
             System.out.println("\nUsing implementation: " + stringSearchInstance.getClass().getName());
 
-            StringSearchTests testCases = new StringMatchingTests(stringSearchInstance, isIgnoreCase, isWildcards);
+            StringSearchTests testCases = new StringMatchTests(stringSearchInstance, isIgnoreCase, isWildcards);
             runTestMethods(testCases);
 
             if(isIgnoreCase) {
@@ -100,6 +108,9 @@ public class FunctionalTests {
 
         out.println("\n\nTesting stringsearch wildcards + ignore case");
         runStringTests(stringSearchWildcardsIgnoreCaseInstances, true, true);
+
+        out.println("\n\nTesting stringsearch with mismatch");
+        runStringMismatchTests(instanceMismatchSearch);
 
         out.println();
         out.println("Total number of test cases: " + numTestCases);
