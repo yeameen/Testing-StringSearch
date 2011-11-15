@@ -193,7 +193,7 @@ public class StringMatchTests implements StringSearchTests {
         Assert.assertIsTrue(3 == numOfExceptions, "Illegal input(s) should throw exception");
     }
 
-    // Note: Fails at StringSearch v2
+    // Note: fails on StringSearch v2
     void testEmptyTarget() throws AssertionFailureException {
         /**
          * Test 3
@@ -217,7 +217,7 @@ public class StringMatchTests implements StringSearchTests {
         match(target, pattern, -1);
     }
 
-    // Note: Fails at StringSearch v2
+    // Note: fails on StringSearch v2
     void testEmptyPattern() throws  AssertionFailureException {
         /**
          * Test 4
@@ -240,7 +240,7 @@ public class StringMatchTests implements StringSearchTests {
         match(target, pattern, -1);
     }
 
-    // Note: Fails at StringSearch v2. This test is actually extension of previous two and proves
+    // Note: fails on StringSearch v2. This test is actually extension of previous two and proves
     // there is no input value checking most likely no interference
     void testEmptyTargetAndPattern() throws  AssertionFailureException {
         /**
@@ -613,6 +613,21 @@ public class StringMatchTests implements StringSearchTests {
         String target = "abcd";
         String pattern = "a";
         int startIndex = 0;
+        int endIndex = target.length();
+        int expectedPosition = 0;
+
+        match(target, pattern, expectedPosition, startIndex, endIndex);
+    }
+
+    // Note: fails in StringSearch. But if you don't pass end index, negative start doesn't have any impact
+    void testRangedSearchWithNegativeStartIndex() throws AssertionFailureException {
+        /**
+         * Test 21
+         */
+        String target = "qwert";
+        String pattern = "qwe";
+
+        int startIndex = -1;
         int endIndex = target.length();
         int expectedPosition = 0;
 
