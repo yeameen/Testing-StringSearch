@@ -1,3 +1,4 @@
+import com.eaio.stringsearch.BoyerMooreHorspool;
 import com.eaio.stringsearch.StringSearch;
 
 /**
@@ -26,11 +27,17 @@ public class StringMatchTests implements StringSearchTests {
         int length = input.length();
 
         if(isIgnoreCase) {
+
+            // Step 1: Random number of characters to replace
             int numberOfCharactersToReplace = getRandomIntWithinRange(length);
 
             char[] chars = input.toCharArray();
             for(int i = 0; i < numberOfCharactersToReplace; i++) {
+
+                // Step 2: Pick a random position
                 int randomPosition = getRandomIntWithinRange(length);
+
+                // Step 3: Replace
                 if(Character.isUpperCase(chars[randomPosition])) {
                     chars[randomPosition] = Character.toLowerCase(chars[randomPosition]);
                 } else {
@@ -44,7 +51,7 @@ public class StringMatchTests implements StringSearchTests {
             int numberOfCharactersToReplace = getRandomIntWithinRange(length);
 
             if (isWildcards && numberOfCharactersToReplace > length - 2) {
-                /* Its not a good idea to replace all the characters by wildcards. So reduce the number */
+                // Its not a good idea to replace all the characters by wildcards. So reduce the number
                 numberOfCharactersToReplace = length - 2;
             }
 
@@ -63,6 +70,16 @@ public class StringMatchTests implements StringSearchTests {
         TestHelper.match(stringSearch, target, pattern, expectedPosition);
     }
 
+    void match(String target, String pattern, int expectedPosition, int startIndex) throws AssertionFailureException {
+        TestHelper.match(stringSearch, target, pattern, expectedPosition, startIndex);
+    }
+
+    void match(String target, String pattern, int expectedPosition, int startIndex, int endIndex) throws AssertionFailureException {
+        TestHelper.match(stringSearch, target, pattern, expectedPosition, startIndex, endIndex);
+    }
+
+
+
     /*******************************************************************************************************************
      * PART 1: String match without range
      *
@@ -73,7 +90,7 @@ public class StringMatchTests implements StringSearchTests {
      ******************************************************************************************************************/
     void testMismatch() throws AssertionFailureException {
         /**
-         * Technique used: Equivalence Input Partitioning.
+         * Technique used: Equivalence Input Partitioning
          *
          * This test case represents the equivalence class of test inputs - the pattern doesn't match
          * with the target string
@@ -92,10 +109,33 @@ public class StringMatchTests implements StringSearchTests {
 
     }
 
+    void testMatchingSomewhere() throws AssertionFailureException {
+        /**
+         * Test 1
+         *
+         * Technique used: Equivalence Input Partitioning
+         *
+         * This test case considers boundary value of the output to any implementation of StringSearch.
+         * This particular test case passes inputs that pattern matches somewhere at the middle of the target string
+         *
+         * Input:
+         * - a target string
+         * - a pattern that match somewhere at the middle of the target
+         * Expected behaviour:
+         * - the pattern is found at the middle of target where it matches
+         */
+
+        String str = "thequickbrownfox";
+        String pattern = getSamplePattern("quick");
+
+        match(str, pattern, 3);
+
+    }
+
     void testNullInput() throws AssertionFailureException {
 
         /**
-         * Test 1
+         * Test 2
          * Technique used: Equivalence Input Partitioning.
          *
          * This test case represents equivalence class of test inputs to any implementation of StringSearch.
@@ -153,9 +193,10 @@ public class StringMatchTests implements StringSearchTests {
         Assert.assertIsTrue(3 == numOfExceptions, "Illegal input(s) should throw exception");
     }
 
+    // Note: Fails at StringSearch v2
     void testEmptyTarget() throws AssertionFailureException {
         /**
-         * Test 2
+         * Test 3
          * Technique used: Boundary Value Analysis.
          *
          * This test case represents some boundary values of inputs to any implementation of StringSearch.
@@ -176,9 +217,10 @@ public class StringMatchTests implements StringSearchTests {
         match(target, pattern, -1);
     }
 
+    // Note: Fails at StringSearch v2
     void testEmptyPattern() throws  AssertionFailureException {
         /**
-         * Test 3
+         * Test 4
          * Technique used: Boundary Value Analysis.
          *
          * This test case represents some boundary values of inputs to any implementation of StringSearch - empty inputs.
@@ -198,9 +240,11 @@ public class StringMatchTests implements StringSearchTests {
         match(target, pattern, -1);
     }
 
+    // Note: Fails at StringSearch v2. This test is actually extension of previous two and proves
+    // there is no input value checking most likely no interference
     void testEmptyTargetAndPattern() throws  AssertionFailureException {
         /**
-         * Test 4
+         * Test 5
          * Technique used: Boundary Value Analysis.
          *
          * This test case represents some boundary values of inputs to any implementation of StringSearch.
@@ -221,7 +265,7 @@ public class StringMatchTests implements StringSearchTests {
 
     void testMatchingAtBeginning() throws AssertionFailureException {
         /**
-         * Test 5
+         * Test 6
          *
          * Technique used: Boundary Value Analysis
          *
@@ -241,29 +285,6 @@ public class StringMatchTests implements StringSearchTests {
         match(str, pattern, 0);
     }
 
-
-    void testMatchingAtMiddle() throws AssertionFailureException {
-        /**
-         * Test 6
-         *
-         * Technique used: Equivalent Input Partitioning
-         *
-         * This test case considers boundary value of the output to any implementation of StringSearch.
-         * This particular test case passes inputs that pattern matches somewhere at the middle of the target string
-         *
-         * Input:
-         * - a target string
-         * - a pattern that match somewhere at the middle of the target
-         * Expected behaviour:
-         * - the pattern is found at the middle of target where it matches
-         */
-
-        String str = "thequickbrownfox";
-        String pattern = getSamplePattern("quick");
-
-        match(str, pattern, 3);
-
-    }
 
     void testMatchingAtEnd() throws AssertionFailureException {
 
@@ -312,10 +333,10 @@ public class StringMatchTests implements StringSearchTests {
          * - the pattern is found at position 0
          */
 
-        String str = "a";
-        String pattern = "a";
+        String target = "a";
+        String pattern = getSamplePattern("a");
 
-        match(str, pattern, 0);
+        match(target, pattern, 0);
 
     }
 
@@ -323,9 +344,9 @@ public class StringMatchTests implements StringSearchTests {
         /**
          * Test 9
          *
-         * Technique used: boundary value analysis.
+         * Technique used: Boundary Value Analysis
          *
-         * This test case checks string matching between two exact same string.
+         * This test case checks string matching between two exact same length string.
          *
          * Input:
          * - a target string
@@ -335,17 +356,17 @@ public class StringMatchTests implements StringSearchTests {
          *
          */
 
-        String str = "thequickbrownfox";
+        String target = "thequickbrownfox";
         String pattern = getSamplePattern("thequickbrownfox");
 
-        match(str, pattern, 0);
+        match(target, pattern, 0);
     }
 
-    void testOverMatch() throws AssertionFailureException {
+    void testLargerPatternWithPartialMatch() throws AssertionFailureException {
         /**
          * Test 10
          *
-         * Technique used: boundary value analysis.
+         * Technique used: Boundary Value Analysis
          *
          * This test case tries to match between two strings where target is a substring of the pattern.
          *
@@ -358,10 +379,10 @@ public class StringMatchTests implements StringSearchTests {
          *
          */
 
-        String str = "thequickbrownfox";
+        String target = "thequickbrownfox";
         String pattern = getSamplePattern("thequickbrownfoxjump");
 
-        match(str, pattern, -1);
+        match(target, pattern, -1);
     }
 
     void testSpecialCharacterMatch() throws AssertionFailureException {
@@ -383,12 +404,10 @@ public class StringMatchTests implements StringSearchTests {
          * - the pattern found at the target
          */
 
-        String str = "hello_+&^* ()-=!@#world";
+        String target = "hello_+&^* ()-=!@#world";
         String pattern = "&^* ()";
 
-        int location = stringSearch.searchString(str, pattern);
-
-        Assert.assertEquals(str.indexOf('&'), location);
+        match(target, pattern, target.indexOf('&'));
     }
 
     void testMaximumAllowedPattern() throws AssertionFailureException {
@@ -404,9 +423,19 @@ public class StringMatchTests implements StringSearchTests {
          *  - the index of where the matching starts
          */
 
+        // Other than BoyerMooreHorsepool implementations, all impose 32 character limit on pattern
+        if (stringSearch instanceof BoyerMooreHorspool) {
+            return;
+        }
+
         String str = "Garbage Starting Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
         String pattern = getSamplePattern("Lorem ipsum dolor sit amet, cons");
 
+        match(str, pattern, 17);
+
+        pattern = getSamplePattern("Lorem ipsum dolor sit amet, consasdf9809238");
+
+        // Still matches in all libraries except BoyerMooreHorsepool variants
         match(str, pattern, 17);
     }
 
@@ -421,7 +450,7 @@ public class StringMatchTests implements StringSearchTests {
      *
      ******************************************************************************************************************/
 
-    void testStartMatchingFromSomewhereInTheMiddleOfTheTarget() throws AssertionFailureException{
+    void testStartMatchingFromSomePosition() throws AssertionFailureException{
         /**
          * Test 13
          *
@@ -443,14 +472,11 @@ public class StringMatchTests implements StringSearchTests {
         String patternBeforeAltering = "quickb";
         String pattern = getSamplePattern(patternBeforeAltering);
 
+        // Looking for the the second match. So set starting point as one passed the first match
         int startIndex = target.indexOf(patternBeforeAltering) + 1;
         int expectedIndex = target.indexOf(patternBeforeAltering, startIndex);
 
-        System.out.print("  target: " + target + ", pattern: " + pattern);
-
-        int location = stringSearch.searchString(target, startIndex, pattern);
-        Assert.assertEquals(expectedIndex, location);
-
+        match(target, pattern, expectedIndex, startIndex);
     }
 
     void testNegativeStartIndex() throws AssertionFailureException {
@@ -475,12 +501,9 @@ public class StringMatchTests implements StringSearchTests {
         String target = "thequickbrown";
         String pattern = getSamplePattern("quickb");
         int startIndex = -1;
+        int expectedIndex = 3;
 
-        System.out.print("  target: " + target + ", pattern: " + pattern);
-
-        int location = stringSearch.searchString(target, startIndex, pattern);
-        Assert.assertEquals(3, location);
-
+        match(target, pattern, expectedIndex, startIndex);
     }
 
     void testStartMatchingAtIndexBeyondTargetLength() throws AssertionFailureException {
@@ -505,12 +528,9 @@ public class StringMatchTests implements StringSearchTests {
         String target = "thequickbrown";
         String pattern = getSamplePattern("quickb");
         int startIndex = target.length();
+        int expectedPosition = -1;
 
-        System.out.print("  target: " + target + ", pattern: " + pattern + ", start-index: " + startIndex);
-
-        int location = stringSearch.searchString(target, startIndex, pattern);
-        Assert.assertEquals(-1, location);
-
+        match(target, pattern, expectedPosition, startIndex);
     }
 
     /*******************************************************************************************************************
@@ -524,6 +544,7 @@ public class StringMatchTests implements StringSearchTests {
      *
      ******************************************************************************************************************/
 
+    // Note: fails on StringSearch v2. Possibly the library stop looking one character before the last index
     void testSingleCharacterStringWithRange() throws AssertionFailureException {
         /**
          * Test 16
@@ -533,12 +554,12 @@ public class StringMatchTests implements StringSearchTests {
 
         int startIndex = 0;
         int endIndex = 0;
+        int expectedPosition = 0;
 
-        int location = stringSearch.searchString(target, startIndex, endIndex, pattern);
-        Assert.assertEquals(startIndex, location);
+        match(target, pattern, expectedPosition, startIndex, endIndex);
     }
 
-
+    // Note: also fails on StringSearch v2. The reason is as previous - the library stop looking one character before the last index
     void testRangedSearchWithExactRangeOfMatch() throws AssertionFailureException {
         /**
          * Test 17
@@ -547,51 +568,15 @@ public class StringMatchTests implements StringSearchTests {
         String pattern = "abcd";
         int startIndex = 0;
         int endIndex = target.length() - 1;
+        int expectedPosition = 0;
 
-        int location = stringSearch.searchString(target, startIndex, endIndex, pattern);
-
-        Assert.assertEquals(0, location);
-
-        System.out.println(" (PASSED)");
+        match(target, pattern, expectedPosition, startIndex, endIndex);
     }
 
-    void testMatchingOccursAtEndIndex() throws AssertionFailureException {
-        /**
-         * Test 18
-         */
-        String target = "abcd";
-        String pattern = "d";
-        int startIndex = 0;
-        int endIndex = target.length() - 1;
-
-        int location = stringSearch.searchString(target, startIndex, endIndex, pattern);
-
-        Assert.assertEquals(3, location);
-
-        System.out.println(" (PASSED)");
-
-    }
-
-    void testMatchingOccursAtStartIndex() throws AssertionFailureException {
-        /**
-         * Test 19
-         */
-        String target = "abcd";
-        String pattern = "a";
-        int startIndex = 0;
-        int endIndex = target.length();
-
-        int location = stringSearch.searchString(target, startIndex, endIndex, pattern);
-
-        Assert.assertEquals(0, location);
-
-        System.out.println(" (PASSED)");
-    }
-
-
+    // Note: fails too
     void testMatchingSingleCharacterAtStartIndexAndEndIndex() throws AssertionFailureException {
         /**
-         * Test 20
+         * Test 18
          */
 
         String target = "thequickbrown";
@@ -599,14 +584,38 @@ public class StringMatchTests implements StringSearchTests {
 
         int startIndex = 2;
         int endIndex = 2;
+        int expectedPosition = 2;
 
-        System.out.print("  target: " + target + ", pattern: " + pattern + ", start-index: " + startIndex + ", end-index: " + endIndex);
+        match(target, pattern, expectedPosition, startIndex, endIndex);
 
-        int location = stringSearch.searchString(target, startIndex, endIndex, pattern);
-
-        Assert.assertEquals(2, location);
-
-        System.out.println(" (PASSED)");
     }
 
+
+    // Note: further tested to establish the failing point
+    void testMatchingOccursAtEndIndex() throws AssertionFailureException {
+        /**
+         * Test 19
+         */
+        String target = "abcd";
+        String pattern = "d";
+        int startIndex = 0;
+        int endIndex = target.length() - 1;
+        int expectedPosition = 3;
+
+        match(target, pattern, expectedPosition, startIndex, endIndex);
+
+    }
+
+    void testMatchingOccursAtStartIndex() throws AssertionFailureException {
+        /**
+         * Test 20
+         */
+        String target = "abcd";
+        String pattern = "a";
+        int startIndex = 0;
+        int endIndex = target.length();
+        int expectedPosition = 0;
+
+        match(target, pattern, expectedPosition, startIndex, endIndex);
+    }
 }

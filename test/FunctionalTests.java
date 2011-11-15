@@ -48,6 +48,7 @@ public class FunctionalTests {
                         out.println("  " + e.getCause().getMessage());
                         out.println("  *******************************************************************************************************");
                     } else {
+                        out.println();
                         out.println("The library crashed while calling '" + declaredMethod.getName() + "' for reason - " + e.getMessage());
                         e.printStackTrace(out);
                     }
@@ -62,7 +63,7 @@ public class FunctionalTests {
         runTestMethods(testCases);
     }
 
-    private static void runStringTests(StringSearch[] stringSearchInstances, boolean isIgnoreCase, boolean isWildcards) {
+    private static void runStringMatchTests(StringSearch[] stringSearchInstances, boolean isIgnoreCase, boolean isWildcards) {
 
         for(StringSearch stringSearchInstance : stringSearchInstances) {
 
@@ -98,16 +99,16 @@ public class FunctionalTests {
         StringSearch[] stringSearchWildcardsIgnoreCaseInstances = {instanceBNDMWildcardsCI};
 
         out.println("\n\nTesting stringsearch with straight-forward string matching");
-        runStringTests(stringSearchInstances, false, false);
+        runStringMatchTests(stringSearchInstances, false, false);
 
         out.println("\n\nTesting stringsearch with wildcards matching");
-        runStringTests(stringSearchWildcardInstances, false, false);
+        runStringMatchTests(stringSearchWildcardInstances, false, false);
 
         out.println("\n\nTesting stringsearch with ignore case");
-        runStringTests(stringSearchIgnoreCaseInstances, true, false);
+        runStringMatchTests(stringSearchIgnoreCaseInstances, true, false);
 
         out.println("\n\nTesting stringsearch wildcards + ignore case");
-        runStringTests(stringSearchWildcardsIgnoreCaseInstances, true, true);
+        runStringMatchTests(stringSearchWildcardsIgnoreCaseInstances, true, true);
 
         out.println("\n\nTesting stringsearch with mismatch");
         runStringMismatchTests(instanceMismatchSearch);
