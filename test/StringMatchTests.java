@@ -461,9 +461,9 @@ public class StringMatchTests implements StringSearchTests {
          * the target string
          *
          * Input:
-         * - a non-empty target string
+         * - a non-empty target string with the pattern twice
          * - a non-empty and a substring of target string as pattern
-         * - a negative start index
+         * - a some index beyond te first match
          *
          * Expected Behavior:
          * - No match
@@ -620,6 +620,7 @@ public class StringMatchTests implements StringSearchTests {
     }
 
     // Note: fails in StringSearch. But if you don't pass end index, negative start doesn't have any impact
+    // @see StringMatchTests#testNegativeStartIndex() other test
     void testRangedSearchWithNegativeStartIndex() throws AssertionFailureException {
         /**
          * Test 21
