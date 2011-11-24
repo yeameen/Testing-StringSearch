@@ -620,7 +620,9 @@ public class StringMatchTests implements StringSearchTests {
     }
 
     // Note: fails in StringSearch. But if you don't pass end index, negative start doesn't have any impact
-    // @see StringMatchTests#testNegativeStartIndex() other test
+    /**
+     * @see StringMatchTests#testNegativeStartIndex()
+     */
     void testRangedSearchWithNegativeStartIndex() throws AssertionFailureException {
         /**
          * Test 21
