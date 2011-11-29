@@ -1,10 +1,7 @@
 import com.eaio.stringsearch.StringSearch;
+
 /**
- * Created by IntelliJ IDEA.
- * User: yeameen
- * Date: 11/11/11
- * Time: 11:02 AM
- * To change this template use File | Settings | File Templates.
+ * This class contains functional test cases specifically for StringSearch implementations with ignore case variants
  */
 public class IgnoreCaseTests implements StringSearchTests {
     private StringSearch stringSearch;
@@ -13,6 +10,11 @@ public class IgnoreCaseTests implements StringSearchTests {
     private String pattern;
     private int expectedPosition;
 
+    /**
+     * Initialization
+     *
+     * @param stringSearch
+     */
     public IgnoreCaseTests(StringSearch stringSearch) {
         this.stringSearch = stringSearch;
         target = "thequickbrownfoxjumps";

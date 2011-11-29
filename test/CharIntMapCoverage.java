@@ -15,7 +15,9 @@ public class CharIntMapCoverage implements StringSearchTests {
     private CharIntMap charIntMap;
     private final String STRING_CHAR_INT = "abracadebra";
     private byte[] storage;
-    File temp;
+
+//    required if you use filesystem for read/write
+//    File temp;
 
 
     private void init() {

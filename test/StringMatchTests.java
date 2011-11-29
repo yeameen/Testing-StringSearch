@@ -145,16 +145,22 @@ public class StringMatchTests implements StringSearchTests {
          * Any illegal input null actually results in raising Exception in this library, though I don't think
          * this is the right way to do this. At least the library can wrap this in its own exception
          *
+         * Input:
          * - a null target
          * - a null pattern
+         * Expected Behavior:
          * - should throw NullPointerException
          *
+         * Input:
          * - a null target
          * - a non-null pattern
+         * Expected Behavior:
          * - should throw NullPointerException
          *
+         * Input:
          * - a non-null target
          * - a null pattern
+         * Expected Behavior:
          * - should throw NullPointerException
          */
 
@@ -190,7 +196,7 @@ public class StringMatchTests implements StringSearchTests {
         }
 
         // All should through exception
-        Assert.assertIsTrue(3 == numOfExceptions, "Illegal input(s) should throw exception");
+        Assert.assertIsTrue(3 == numOfExceptions, "Illegal input(s) throw exception(s)");
     }
 
     // Note: fails on StringSearch v2
@@ -619,7 +625,7 @@ public class StringMatchTests implements StringSearchTests {
         match(target, pattern, expectedPosition, startIndex, endIndex);
     }
 
-    // Note: fails in StringSearch. But if you don't pass end index, negative start doesn't have any impact
+    // Note: fails in StringSearch. But if you don't pass the end index, negative start doesn't have any impact
     /**
      * @see StringMatchTests#testNegativeStartIndex()
      */

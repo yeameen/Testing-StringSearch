@@ -53,9 +53,11 @@ public class CoverageTests {
     }
 
     /**
-     * Run all coverage test cases from the StringSearch instance
+     * Run coverage test cases from the StringSearch instance. Using Jave reflection, it looks for all the test methods
+     * that starts with prefix "test" and invoke. Since this method only cares for coverage, it will care for assertion
+     * failure.
      *
-     * @param test StringSearchTests
+     * @param test An initiated instance of {@link StringSearchTests}
      */
     private static void runTestMethods(StringSearchTests test) {
         Class testsClass = test.getClass();

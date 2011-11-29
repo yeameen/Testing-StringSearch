@@ -7,49 +7,7 @@ public class StringMatchCoverage implements StringSearchTests {
         this.stringSearch = stringSearch;
     }
 
-    public void testSearchBytesMismatch() {
-        String target = "fdlaskj";
-        String pattern = "fda";
-
-        stringSearch.searchBytes(target.getBytes(), pattern.getBytes());
-    }
-
-
-    public void testSearchBytesMatch() {
-        String target = "fdlaskj";
-        String pattern = "las";
-
-        stringSearch.searchBytes(target.getBytes(), pattern.getBytes());
-    }
-
-    public void testSearchWithMixedCase() {
-        String target = "fdlaskj";
-        String pattern = "ABC";
-
-        stringSearch.searchBytes(target.getBytes(), pattern.getBytes());
-    }
-
-    public void testSearchBytesWithLongInput() {
-        String target = "dfas;lkjfsda;ksfdjlksdajlsdafjsdakjfslkj";
-        String pattern = "dfaslkjfsdak afdskjfsdalk asfdkjsfdn afsdlkjfsda";
-
-        stringSearch.searchBytes(target.getBytes(), pattern.getBytes());
-    }
-
-    public void testByteWithAbove127() {
-        byte[] targetBytes = {(byte)128, 1};
-        byte[] patternBytes = {(byte)128, (byte)255};
-
-        stringSearch.searchBytes(targetBytes, patternBytes);
-    }
-
-    public void testByteWithUppercase() {
-        byte[] targetBytes = {1, 2, 3};
-        byte[] patternBytes = {(byte)93, (byte)128, (byte)140};
-
-        stringSearch.searchBytes(targetBytes, patternBytes);
-    }
-
+    // passing all possible bytes to searchBytes
     public void testPatternWithAllPossibleBytes() {
         byte[] targetBytes = new byte[32];
         byte[] patternBytes = new byte[32];
@@ -119,10 +77,14 @@ public class StringMatchCoverage implements StringSearchTests {
         stringSearch.searchChars(targetBytes, patternBytes);
     }
 
+    // calling trivial functions:
+    // part 1
     public void testCallingHashcode() {
+
         stringSearch.hashCode();
     }
 
+    // part 2
     public void testCallingToString() {
         stringSearch.toString();
     }
@@ -134,18 +96,13 @@ public class StringMatchCoverage implements StringSearchTests {
     public void testWithProcessed() {
         String target = "fdsak";
         String pattern = "fpiou";
-        String targetZero = "";
+        String targetZeroLength = "";
 
         Object processedString = stringSearch.processString(pattern);
         Object processedCharacters = stringSearch.processString(pattern);
         Object processedBytes = stringSearch.processBytes(pattern.getBytes());
 
-//        stringSearch.searchString(targetZero, pattern);
-//        stringSearch.searchString(targetZero, 0, pattern);
-        stringSearch.searchString(targetZero, pattern, processedString);
-//        stringSearch.searchString(targetZero, 0, pattern, processedString);
-//        stringSearch.searchString(targetZero, 0, pattern.length(), pattern, processedString);
-
+        stringSearch.searchString(targetZeroLength, pattern, processedString);
 
         stringSearch.searchString(target, pattern);
         stringSearch.searchChars(target.toCharArray(), pattern.toCharArray());
@@ -164,11 +121,10 @@ public class StringMatchCoverage implements StringSearchTests {
         stringSearch.searchChars(target.toCharArray(), 0, pattern.toCharArray(), processedCharacters);
         stringSearch.searchBytes(target.getBytes(), 0, pattern.getBytes(), processedBytes);
 
-//        stringSearch.searchString(target, 0, pattern.length(), pattern, processedString);
         stringSearch.searchChars(target.toCharArray(), 0, pattern.length(), pattern.toCharArray());
         stringSearch.searchBytes(target.getBytes(), 0, pattern.length(), pattern.getBytes());
-
     }
+
     public void testCallingDifferentStringSearchInstance() {
         StringSearch differentStringSearch = new BNDM();
         String target = "hello";
@@ -177,11 +133,5 @@ public class StringMatchCoverage implements StringSearchTests {
         stringSearch.equals(differentStringSearch);
         stringSearch.equals(stringSearch);
         stringSearch.equals(null);
-    }
-
-    public void testWithMismatchSearch() {
-        MismatchSearch mismatchSearch = new ShiftOrMismatches();
-        String target = "hello";
-        String pattern = "fads";
     }
 }

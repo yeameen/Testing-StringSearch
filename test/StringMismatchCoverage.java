@@ -1,11 +1,8 @@
 import com.eaio.stringsearch.*;
 
 /**
- * Created by IntelliJ IDEA.
- * User: yeameen
- * Date: 11/15/11
- * Time: 11:39 AM
- * To change this template use File | Settings | File Templates.
+ * The test cases to cover {@link MismatchSearch}. The only difference of the methods  with other {@link StringSearch}
+ * methods is these methods takes another parameter n; the number of possible mismatches
  */
 public class StringMismatchCoverage implements StringSearchTests {
     MismatchSearch mismatchSearch;
@@ -15,6 +12,9 @@ public class StringMismatchCoverage implements StringSearchTests {
     }
 
 
+    /**
+     * Pass all possible bytes to {@link MismatchSearch#searchBytes}
+     */
     public void testPatternWithAllPossibleBytes() {
         byte[] targetBytes = new byte[32];
         byte[] patternBytes = new byte[32];
@@ -29,23 +29,22 @@ public class StringMismatchCoverage implements StringSearchTests {
         }
     }
 
+    /**
+     * Similar to {@link StringMatchCoverage#testWithProcessed()}. This time with extra parameter k
+     */
     public void testWithProcessed() {
         String target = "fdsak";
         String pattern = "fpiou";
 
-        String targetZero = "";
+        String targetZeroLength = "";
         int k = 5;
 
         Object processedString = mismatchSearch.processString(pattern, k);
         Object processedCharacters = mismatchSearch.processString(pattern, k);
         Object processedBytes = mismatchSearch.processBytes(pattern.getBytes(), k);
 
-//        mismatchSearch.searchString(targetZero, pattern, k);
-        mismatchSearch.searchString(targetZero, 0, pattern, k);
-        mismatchSearch.searchString(targetZero, pattern, processedString, k);
-//        mismatchSearch.searchString(targetZero, 0, pattern, processedString, k);
-
-
+        mismatchSearch.searchString(targetZeroLength, 0, pattern, k);
+        mismatchSearch.searchString(targetZeroLength, pattern, processedString, k);
 
         mismatchSearch.searchString(target, pattern, k);
         mismatchSearch.searchChars(target.toCharArray(), pattern.toCharArray(), k);
@@ -67,20 +66,5 @@ public class StringMismatchCoverage implements StringSearchTests {
         mismatchSearch.searchChars(target.toCharArray(), 0, pattern.length(), pattern.toCharArray(), k);
         mismatchSearch.searchBytes(target.getBytes(), 0, pattern.length(), pattern.getBytes(), k);
 
-    }
-    public void testCallingDifferentStringSearchInstance() {
-        StringSearch differentStringSearch = new BNDM();
-        String target = "hello";
-        String pattern = "fads";
-
-        mismatchSearch.equals(differentStringSearch);
-        mismatchSearch.equals(mismatchSearch);
-        mismatchSearch.equals(null);
-    }
-
-    public void testWithMismatchSearch() {
-        MismatchSearch mismatchSearch = new ShiftOrMismatches();
-        String target = "hello";
-        String pattern = "fads";
     }
 }

@@ -28,8 +28,6 @@ public class StringMismatchTests implements StringSearchTests {
         System.out.print(", Result: " + results[0] + ", " + results[1]);
         Assert.assertEquals(3, results[0]);
         Assert.assertEquals(1, results[1]);
-
-        System.out.print("  (PASSED)");
     }
 
     public void testMismatchWithSingleCharacterString() throws AssertionFailureException {
@@ -45,9 +43,6 @@ public class StringMismatchTests implements StringSearchTests {
         System.out.print(", Result: " + results[0] + ", " + results[1]);
         Assert.assertEquals(0, results[0]);
         Assert.assertEquals(1, results[1]);
-
-        System.out.print("  (PASSED)");
-
     }
 
     public void testMismatchWithRange() throws AssertionFailureException {
@@ -66,9 +61,5 @@ public class StringMismatchTests implements StringSearchTests {
 
         Assert.assertEquals(startIndex, results[0]);
         Assert.assertEquals(numOfMismatches, results[1]);
-
-        System.out.print("  (PASSED)");
-
-
     }
 }
