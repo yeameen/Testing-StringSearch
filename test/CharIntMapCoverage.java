@@ -3,13 +3,6 @@ import com.eaio.stringsearch.CharIntMap;
 
 import java.io.*;
 
-/**
- * Created by IntelliJ IDEA.
- * User: yeameen
- * Date: 11/17/11
- * Time: 12:04 AM
- * To change this template use File | Settings | File Templates.
- */
 public class CharIntMapCoverage implements StringSearchTests {
 
     private CharIntMap charIntMap;
@@ -41,6 +34,7 @@ public class CharIntMapCoverage implements StringSearchTests {
 
     public void testToString() {
         charIntMap.toString();
+        charIntMap.toStringBuffer(new StringBuffer());
     }
 
     public void testGettingLength() {
@@ -57,14 +51,19 @@ public class CharIntMapCoverage implements StringSearchTests {
 
     public void testEquality() {
         CharIntMap emptyCharIntMap = new CharIntMap();
-        String nonEmptyString = "asdf";
+        CharIntMap emptyCharIntMap2 = new CharIntMap();
+        String nonEmptyString = "sdf";
         CharIntMap nonEmptyCharIntMap = getCharIntMap(nonEmptyString);
         CharIntMap equivalentCharIntMap = getCharIntMap(STRING_CHAR_INT);
+        CharIntMap differentDefaultValueCharIntMap = new CharIntMap(5, 'a', 1);
 
         charIntMap.equals(charIntMap);
         charIntMap.equals(emptyCharIntMap);
         charIntMap.equals(nonEmptyCharIntMap);
         charIntMap.equals(nonEmptyString);
+        charIntMap.equals(equivalentCharIntMap);
+        charIntMap.equals(differentDefaultValueCharIntMap);
+        emptyCharIntMap.equals(emptyCharIntMap2);
     }
 
     public void testHashcode() {
@@ -74,7 +73,8 @@ public class CharIntMapCoverage implements StringSearchTests {
 
 
     public void testWriteExternal() throws Exception {
-        // The persistence can be also implemented with filesystem
+
+//        The persistence can be also implemented with filesystem
 //        temp = File.createTempFile("temp", "data");
 //        temp.deleteOnExit();
 //        FileOutputStream fileOutputStream = new FileOutputStream(temp);
@@ -91,7 +91,19 @@ public class CharIntMapCoverage implements StringSearchTests {
 
     }
 
+    public void testWriteExternalForEmptyCharintmap() throws Exception {
+        // write an empty char int map; just to increase coverage
+
+        CharIntMap emptyCharIntMap = new CharIntMap();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+
+        emptyCharIntMap.writeExternal(objectOutputStream);
+    }
+
     public void testReadExternal() throws IOException {
+
         // Open inputstream from storage
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(storage);
         ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
