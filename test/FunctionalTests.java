@@ -72,16 +72,6 @@ public class FunctionalTests {
     }
 
     /**
-     * Run mismatch test cases on {@link ShiftOrMismatches} instance
-     *
-     * @param mismatchSearch
-     */
-    private static void runStringMismatchTests(MismatchSearch mismatchSearch) {
-        StringSearchTests testCases = new StringMismatchTests(mismatchSearch);
-        runTestMethods(testCases);
-    }
-
-    /**
      * Run string matching test cases on all the {@link StringSearch} instances.
      *
      * At first configure TestCase class according to what option is supported by the instance. Then run the tests
@@ -136,9 +126,6 @@ public class FunctionalTests {
 
         out.println("\n\nTesting stringsearch wildcards + ignore case");
         runStringMatchTests(stringSearchWildcardsIgnoreCaseInstances, true, true);
-
-        out.println("\n\nTesting stringsearch with mismatch");
-        runStringMismatchTests(instanceMismatchSearch);
 
         // Show the summary
         out.println();
