@@ -696,7 +696,6 @@ public class StringMatchTests implements StringSearchTests {
 
     // Another test. This time tries to match one character before last index. This one passed when it was written.
     // PASSED! Most likely the algorithm stops looking match one character before the last index.
-    @SkipTest
     void testMatchingSingleCharacterAtOneCharacterBeforeEndIndex() throws AssertionFailureException {
         /**
          * Test 21
