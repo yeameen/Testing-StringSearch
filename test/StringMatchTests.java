@@ -296,8 +296,8 @@ public class StringMatchTests implements StringSearchTests {
          * - the pattern is found at position 0
          */
 
-        String target = getSampleTarget("thequickbrown");
-        String pattern = getSamplePattern("thequick");
+        String target = getSampleTarget("asdfghjkl");
+        String pattern = getSamplePattern("asdf");
 
         match(target, pattern, 0);
     }
@@ -350,8 +350,8 @@ public class StringMatchTests implements StringSearchTests {
          * - the pattern is found at position 0
          */
 
-        String target = getSampleTarget("a");
-        String pattern = getSamplePattern("a");
+        String target = getSampleTarget("q");
+        String pattern = getSamplePattern("q");
 
         match(target, pattern, 0);
 
@@ -641,8 +641,8 @@ public class StringMatchTests implements StringSearchTests {
          * Expected Behavior:
          * - Match at index 0
          */
-        String target = getSampleTarget("abcd");
-        String pattern = getSamplePattern("abcd");
+        String target = getSampleTarget("qwerty");
+        String pattern = getSamplePattern("qwerty");
         int startIndex = 0;
         int endIndex = target.length() - 1;
         int expectedPosition = 0;
@@ -699,8 +699,8 @@ public class StringMatchTests implements StringSearchTests {
          * - Match at the argument end index
          */
 
-        String target = getSampleTarget("thequickbrown");
-        String pattern = getSamplePattern("e");
+        String target = getSampleTarget("klmnop");
+        String pattern = getSamplePattern("m");
 
         int startIndex = 2;
         int endIndex = 2;
@@ -759,8 +759,8 @@ public class StringMatchTests implements StringSearchTests {
          * Expected Behavior:
          * - Match at index 0
          */
-        String target = getSampleTarget("abcd");
-        String pattern = getSamplePattern("a");
+        String target = getSampleTarget("fdsa");
+        String pattern = getSamplePattern("f");
         int startIndex = 0;
         int endIndex = target.length();
         int expectedPosition = 0;
@@ -788,8 +788,8 @@ public class StringMatchTests implements StringSearchTests {
          * Expected Behavior:
          * - Match at index 0
          */
-        String target = getSampleTarget("qwert");
-        String pattern = getSamplePattern("we");
+        String target = getSampleTarget("dvorak");
+        String pattern = getSamplePattern("ora");
 
         int startIndex = -1;
         int endIndex = target.length();
