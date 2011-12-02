@@ -135,7 +135,7 @@ public class BNDMWildcardsCI extends BNDMWildcards {
         char max = Character.MIN_VALUE;
         for (int i = 0; i < end; i++) {
             if (Character.isLetter(pattern[i])) {
-                min = min < (t = min(Character.toLowerCase(pattern[i]),
+                min = min > (t = min(Character.toLowerCase(pattern[i]),
                         Character.toUpperCase(pattern[i]))) ? min : t;
                 max = max > (t = max(Character.toLowerCase(pattern[i]),
                         Character.toUpperCase(pattern[i]))) ? max : t;
