@@ -3,11 +3,7 @@ import com.eaio.stringsearch.StringSearch;
 import java.util.Arrays;
 
 /**
- * Created by IntelliJ IDEA.
- * User: yeameen
- * Date: 11/11/11
- * Time: 11:34 AM
- * To change this template use File | Settings | File Templates.
+ * The test on this class only works on StringSearch implementations that support wildcards.
  */
 public class WildcardsTests implements StringSearchTests {
     private StringSearch stringSearch;
@@ -18,7 +14,7 @@ public class WildcardsTests implements StringSearchTests {
 
     public void testAllWildcards() throws AssertionFailureException {
         /**
-         * Test 16
+         * Test 1
          *
          * Technique used: Boundary value input
          *

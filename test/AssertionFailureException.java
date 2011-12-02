@@ -1,9 +1,5 @@
 /**
- * Created by IntelliJ IDEA.
- * User: yeameen
- * Date: 11/10/11
- * Time: 11:55 AM
- * To change this template use File | Settings | File Templates.
+ * Custom Exception that is thrown in case of any mismatch between actual and expected behaviour
  */
 public class AssertionFailureException extends Exception {
 

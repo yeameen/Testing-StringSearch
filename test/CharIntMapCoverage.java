@@ -3,6 +3,9 @@ import com.eaio.stringsearch.CharIntMap;
 
 import java.io.*;
 
+/**
+ * This class contains the test cases to cover CharIntMap statements
+ */
 public class CharIntMapCoverage implements StringSearchTests {
 
     private CharIntMap charIntMap;

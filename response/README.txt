@@ -11,7 +11,8 @@ barely initiate and call the StringMatchTests implementations, which contain the
 no method or constant declaration. It just ensures entry point classes do not accidentally call not test classes.
 The method name of all the test cases start with "test". The entry point classes take this into consideration and
 called those methods using Java Reflection API. This enables easily add/remove test methods by only modifying
-respective test case container classes.
+respective test case container classes. Also a human readable test name generated from the name of the test case
+method name.
 
 The TestHelper class contains some method that are needed by multiple functional test classes. It will also show
 formatted output of inputs, output and expected behavior.

@@ -1,13 +1,13 @@
 import com.eaio.stringsearch.StringSearch;
 
 /**
- * Created by IntelliJ IDEA.
- * User: yeameen
- * Date: 11/10/11
- * Time: 12:56 PM
- * To change this template use File | Settings | File Templates.
+ * This class contains common utility methods used by multiple functional tests classes
  */
 public class TestHelper {
+    /**
+     * @param s camel case name
+     * @return human readable string of the camelCase name
+     */
     public static String splitCamelCase(String s) {
        return s.replaceAll(
           String.format("%s|%s|%s",

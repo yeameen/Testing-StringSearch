@@ -1,5 +1,9 @@
 import com.eaio.stringsearch.*;
 
+/**
+ * The test methods in this class tries to cover those lines that are not by functional testing. The method names
+ * are self explanatory on what it is trying to do
+ */
 public class StringMatchCoverage implements StringSearchTests {
     StringSearch stringSearch;
 

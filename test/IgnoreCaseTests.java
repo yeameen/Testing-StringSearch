@@ -25,7 +25,7 @@ public class IgnoreCaseTests implements StringSearchTests {
 
     public void testAllSameCase() throws AssertionFailureException {
         /**
-         * Test 14
+         * Test 1
          *
          * Technique used: boundary value.
          *
@@ -44,7 +44,7 @@ public class IgnoreCaseTests implements StringSearchTests {
 
     public void testAllOppositeCase() throws AssertionFailureException {
         /**
-         * Test 15
+         * Test 2
          *
          * Technique used: boundary value.
          *

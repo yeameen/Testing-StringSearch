@@ -2,8 +2,11 @@ import com.eaio.stringsearch.BoyerMooreHorspool;
 import com.eaio.stringsearch.StringSearch;
 
 /**
- * @author Chowdhury Ashabul Yeameen
- * @since 11/1/11
+ * Generic functional tests on all the extension of StringSearch abstract class. It also do some random altering of
+ * inputs while calling test cases. The operation includes randomly change cases and replace with wildcards. Not all
+ * StringSearch instance supports these. So based on the initialization parameter, the methods
+ * {@link #getSampleTarget(String)} and {@link #getSamplePattern(String)} do those altering
+ *
  */
 public class StringMatchTests implements StringSearchTests {
 
