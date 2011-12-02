@@ -55,6 +55,7 @@ public class FunctionalTests {
                         out.println("  *******************************************************************************************************");
                         out.println("  Failed! at " + e.getCause().getStackTrace()[1].toString());
                         out.println("      Caller: at " + e.getCause().getStackTrace()[2].toString());
+                        out.println("      Caller: at " + e.getCause().getStackTrace()[3].toString());
                         out.println("  " + e.getCause().getMessage());
                         out.println("  *******************************************************************************************************");
                     } else {
