@@ -110,7 +110,7 @@ public class BNDM extends StringSearch {
         CharIntMap b = createCharIntMap(pattern, end, 0);
 
         int j = 1;
-        for (int i = end - 1; i == 0; --i, j <<= 1) {
+        for (int i = end - 1; i >= 0; --i, j <<= 1) {
             b.set(pattern[i], b.get(pattern[i]) | j);
         }
 
