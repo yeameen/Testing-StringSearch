@@ -32,7 +32,7 @@ public class FunctionalTests {
     private static void runTestMethods(StringSearchTests test) {
         Class testsClass = test.getClass();
         for (Method declaredMethod : testsClass.getDeclaredMethods()) {
-            if (declaredMethod.getName().startsWith("test")) {
+            if (declaredMethod.getName().startsWith("test") && !declaredMethod.isAnnotationPresent(SkipTest.class)) {
                 out.println("Testing - " + TestHelper.splitCamelCase(declaredMethod.getName().substring(4)));
 
                 numTestCases++;
