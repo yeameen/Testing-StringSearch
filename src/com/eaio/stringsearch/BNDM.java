@@ -164,7 +164,7 @@ public class BNDM extends StringSearch {
 
         int d, j, pos, last;
         pos = textStart;
-        while (pos <= textEnd - l) {
+        while (pos != textEnd - l) {
             j = l - 1;
             last = l;
             d = -1;
