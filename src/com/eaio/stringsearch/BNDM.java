@@ -168,7 +168,7 @@ public class BNDM extends StringSearch {
             j = l - 1;
             last = l;
             d = -1;
-            while (d != 0) {
+            while (d > 0) {
                 d &= b.get(text[pos + j]);
                 if (d != 0) {
                     if (j == 0) {
