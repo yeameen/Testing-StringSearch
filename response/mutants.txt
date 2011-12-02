@@ -1,0 +1,115 @@
+Preface:
+========
+Before trying to perform mutation testing, all the failed and Exception throwing test cases are temporarily mutated using a special annotation SkipTest.
+Those failing/crashing test cases due to bugs that need to be addressed. I disabled those from mutation testing just to reduce noise from the existing
+bugs while testing.
+
+Mutation Operator:
+==================
+Mutation is generated manually by replacing some binary relational operator with other possible operators.
+
+To view mutants:
+===============
+The project files are checked in as git repository and all the mutants exist as branch. You need to have git-scm installed to see history or see any brach.
+
+To checkout any mutant, just run from the command line:
+git checkout mutant-d[d]
+
+For example, to see mutant-5 you need to issue "git checkout mutant-5",
+and to see mutant-15 you need to issue "git checkout mutant-15"
+
+Description of the mutants:
+===========================
+All the mutants are described below. First line describes the Filename, line number, and the change made to generate the mutant. The second line says
+whether the mutant is killed or not by the test cases. If killed, the number of failed (functional test) and crashed (among all tests) test numbers are
+also given. If not killed (all test case passed and no crash), I also described the reason why the mutant is indistinguishable by any test input. For all
+the following mutants, I did not come across any situation where I can improve my test cases to kill the mutant.
+
+
+Mutant-1
+  BNDM.java: 113 - changed relational operator from ">=" to ">"
+  Killed (12 failed)
+
+Mutant-2
+  BNDM.java: 113 - changed relational operator from ">=" to "=="
+  Killed (8 failed)
+
+Mutant-3
+  BNDM.java: 113 - changed relational operator from ">=" to "<"
+  Killed (12 failed)
+
+Mutant-4
+  BNDM.java: 113 - changed relational operator from ">=" to "<="
+  Killed (8 failed, 4 crashed)
+
+Mutant-5
+  BNDM.java: 113 - changed relational operator from ">=" to "!="
+  Killed (12 failed)
+
+Mutant-6
+  BNDM.java: 167 - changed relational operator from "<=" to "<"
+  Killed (36 failed)
+ 
+Mutant-7
+  BNDM.java: 167 - changed relational operator from "<=" to "=="
+  Killed (88 failed)
+
+Mutant-8
+  BNDM.java: 167 - changed relational operator from "<=" to ">"
+  Killed (115 failed, 18 crashed)
+
+Mutant-9
+  BNDM.java: 167 - changed relational operator from "<=" to ">="
+  Killed (88 failed, 18 crashed)
+
+Mutant-10
+  BNDM.java: 167 - changed relational operator from "<=" to "!="
+  Killed (36 failed, 19 crashed)
+
+Mutant-11
+  BNDM.java: 171 - changed relational operator from "!=" to "=="
+  Killed (115 failed)
+
+Mutant-12
+  BNDM.java: 171 - changed relational operator from "!=" to ">"
+  Killed (115 failed)
+
+Mutant-13
+  BNDM.java: 171 - changed relational operator from "!=" to ">="
+  Killed (115 failed)
+
+Mutant-14
+  BNDM.java: 171 - changed relational operator from "!=" to "<"
+  Killed (79 failed)
+
+Mutant-15
+  BNDM.java: 171 - changed relational operator from "!=" to "<="
+  Killed (38 failed, 58 crashed)
+
+Mutant-16
+  BNDMWildcardsCI.java: 138 - changed relational operator from "<" to "=="
+  Killed (10 failed)
+
+Mutant-17
+  BNDMWildcardsCI.java: 138 - changed relational operator from "<" to "!="
+  Killed (44 crashed)
+
+Mutant-18
+  BNDMWildcardsCI.java: 138 - changed relational operator from "<" to "<="
+  Not Killed!
+
+  Reason:
+  This mutant is an equivalent mutant. Though the mutants meets Reachability and Necessity, it does not support sufficiency.
+
+  Explanation:
+  The purpose of the mutated statement is to determine the lowest. If any any lower value found, assign the new one as the minimum.
+  Replacing "<" operator with "<=" makes some more unnecessary assignment (when those are equal), but has no impact on the output.
+
+Mutant-19
+  BNDMWildcardsCI.java: 138 - changed relational operator from "<" to ">"
+  Killed (6 failed, 44 crashed)
+
+Mutant-20
+  BNDMWildcardsCI.java: 138 - changed relational operator from "<" to ">="
+  Killed (5 failed, 44 crashed)
+
