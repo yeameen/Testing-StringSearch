@@ -19,7 +19,6 @@ public class FunctionalTests {
     private static StringSearch instanceBNDMWildcardsCI = new BNDMWildcardsCI();
     private static StringSearch instanceBoyerMooreHorspool = new BoyerMooreHorspool();
     private static StringSearch instanceBoyerMooreHorspoolRaita = new BoyerMooreHorspoolRaita();
-    private static MismatchSearch instanceMismatchSearch = new ShiftOrMismatches();
 
 
     /**
